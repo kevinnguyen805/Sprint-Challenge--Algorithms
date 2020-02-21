@@ -95,18 +95,110 @@ class SortingRobot:
     def sort(self):
         """
         Sort the robot's list.
+        Gameplan: Bubble sort
+        1. pick up -- item at [0]
+        2. move -- to next item at [1]
+        3. compare -- items [0] and [1]
+            3a. if 1 -- item[0] is greater than item[1] 
+            4a. swap -- item[0] with item[1]
+            5a. go back left - put item down 
+            6a. move right 
+            7a. pick up item 
+            8a. repeat 
+            
+            3b.if -1 -- item[0] is smaller than item[1]
+            4b. go back left -- put item down 
+            5b. move right 
+            6b. pick up item 
+            7b. repeat 
+
+        BIG MISTAKE - YOU ARE SWAPPING WITH NONE!!!
         """
-        # Fill this out
-        pass
+        self.set_light_on()
+        # begin lights out
+        while self.light_is_on():
+            self.set_light_off()
+            while self.can_move_right():
+                # (1 and 2) pick up and move right 
+                self.swap_item()
+                self.move_right()
+                # (3-4) compare item 
+                if self.compare_item() == 1:
+                    self.swap_item()
+                    self.set_light_on()
+                # (5-6) go back, swap the item, move right 
+                self.move_left()
+                self.swap_item()
+                self.move_right()
+                #repeat
+            
+            #going backwards 
+            while self.can_move_left():
+                self.swap_item()
+                self.move_left()
+                # (3b-4b) if item behind is smaller - swap
+                if self.compare_item() == -1:
+                    self.swap_item()
+                    self.set_light_on()
+                # (5b - 6b) move forward - swap the item - keep going back left
+                self.move_right()
+                self.swap_item()
+                self.move_left()
+                #repeat
+    
+        
+   
+        
 
 
 if __name__ == "__main__":
     # Test our your implementation from the command line
     # with `python robot_sort.py`
 
-    l = [15, 41, 58, 49, 26, 4, 28, 8, 61, 60, 65, 21, 78, 14, 35, 90, 54, 5, 0, 87, 82, 96, 43, 92, 62, 97, 69, 94, 99, 93, 76, 47, 2, 88, 51, 40, 95, 6, 23, 81, 30, 19, 25, 91, 18, 68, 71, 9, 66, 1, 45, 33, 3, 72, 16, 85, 27, 59, 64, 39, 32, 24, 38, 84, 44, 80, 11, 73, 42, 20, 10, 29, 22, 98, 17, 48, 52, 67, 53, 74, 77, 37, 63, 31, 7, 75, 36, 89, 70, 34, 79, 83, 13, 57, 86, 12, 56, 50, 55, 46]
-
+    t = [15, 10, 41, 58, 49, 26, 4, 28, 8, 61, 60, 65, 21, 78, 14, 35, 90, 54, 5, 0, 87, 82, 96, 43, 92, 62, 97, 69, 94, 99, 93, 76, 47, 2, 88, 51, 40, 95, 6, 23, 81, 30, 19, 25, 91, 18, 68, 71, 9, 66, 1, 45, 33, 3, 72, 16, 85, 27, 59, 64, 39, 32, 24, 38, 84, 44, 80, 11, 73, 42, 20, 10, 29, 22, 98, 17, 48, 52, 67, 53, 74, 77, 37, 63, 31, 7, 75, 36, 89, 70, 34, 79, 83, 13, 57, 86, 12, 56, 50, 55, 46]
+    l = [15, 10, 41, 38, 49, 26]
     robot = SortingRobot(l)
+    # robot = SortingRobot()
 
     robot.sort()
-    print(robot._list)
+    # print('list', robot._list)
+    # print('position', robot._position)
+
+
+
+# if self._position < len(self._list) - 1:
+#             self._item = self._list[self._position]
+#             print('item 1', self._item)
+#             self._position += 1
+#             print('position 1', self._position)
+#             print('item at position 1', self._list[self._position])
+
+
+#             # Compare (3)
+#             if self._item is None or self._list[self._position] is None:
+#                 return None
+#             # Previous item is greater than current item (3a)
+#             elif self._item > self._list[self._position]:
+#                 ## Swap (4a) 
+#                 self._item, self._list[self._position] = self._list[self._position], self._item
+#                 # Left (5a)
+#                 self._position -= 1
+#                 print('position bigger', self._position)
+#                 # swap current item (now you have 0 items)
+#                 self._item, self._list[self._position] = self._list[self._position], self._item
+#                 print('holding this item after swap', self._item)
+#                 print('list after swap previous item bigger than current item', l)
+#                 self._position += 1
+#                 self.sort()
+
+#             # Previous item is smaller than current item (3b)
+#             elif self._item < self._list[self._position]:
+#                 self._position -= 1
+#                 self._item, self._list[self._position] = self._list[self._position], self._item
+#                 print('previous item is smaller than current item', self._item)
+#                 print('updated list ', l)
+#                 self._position += 1
+#                 self.sort()
+
+#             else:
+#                 return 0
